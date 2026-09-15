@@ -3,113 +3,265 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>Floot Driver - Car Pool 60/km</title>
+<title>Floot Pool Driver • Final • View Trip • Fixed Map • White Purple</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--purple:#7C3AED;--purple2:#A78BFA;--bg:#FAF7FF}
-body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:#1F1A2E}
+body{font-family:Inter,system-ui,sans-serif;background:#FAF7FF;color:#1F0A2E}
 .app{max-width:420px;margin:0 auto;min-height:100vh;background:#fff;display:flex;flex-direction:column}
-.header{padding:14px 16px;background:#fff;border-bottom:1px solid #F3F0FF;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
-.tabs{display:flex;background:#F5F3FF;border-radius:12px;padding:4px;margin:12px 16px}
-.tab{flex:1;padding:10px;border-radius:10px;text-align:center;font-weight:800;font-size:12px;cursor:pointer;color:#6B7280}
-.tab.active{background:#fff;color:#7C3AED;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.card{background:#fff;border:1px solid #F3F0FF;border-radius:18px;padding:14px;margin:0 16px 12px;box-shadow:0 4px 16px rgba(124,58,237,.06)}
-.label{font-size:10px;font-weight:800;letter-spacing:.1em;color:#8B8BA7;margin-bottom:6px}
-.input{width:100%;background:#F5F3FF;border:1px solid #EDE9FE;border-radius:12px;padding:12px 12px 12px 36px;font-size:13px;outline:none}
-.input-wrap{position:relative;margin-bottom:8px}
-.input-wrap i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#A78BFA;font-size:13px}
-.btn{width:100%;border:none;border-radius:12px;padding:12px;font-weight:800;font-size:13px;cursor:pointer}
-.btn-primary{background:linear-gradient(90deg,#7C3AED,#8B5CF6);color:#fff}
-.pill{padding:6px 10px;border-radius:999px;font-size:11px;font-weight:800;border:1px solid #EDE9FE;background:#fff;color:#6B7280;cursor:pointer}
+.auth-bg{background:linear-gradient(180deg,#7C3AED 0%, #F5F3FF 70%);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:10000;overflow:auto}
+.auth-card{width:100%;max-width:380px;background:#fff;border-radius:24px;padding:24px;box-shadow:0 20px 60px rgba(124,58,237,.2);border:1.5px solid #EDE9FE}
+.input{width:100%;background:#fff;border:1.8px solid #EDE9FE;border-radius:16px;padding:14px 14px 14px 46px;font-size:13px;outline:none;font-weight:600}
+.input:focus{border-color:#7C3AED;box-shadow:0 0 0 4px rgba(124,58,237,.1)}
+.input-wrap{position:relative;margin-bottom:12px}
+.pin{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:12px}
+.pin-from{background:#ECFDF5;color:#10B981}
+.pin-to{background:#FEF2F2;color:#EF4444}
+.btn{width:100%;border:none;border-radius:14px;padding:14px;font-weight:800;font-size:13px;cursor:pointer}
+.btn-primary{background:linear-gradient(90deg,#7C3AED,#8B5CF6);color:#fff;box-shadow:0 8px 20px rgba(124,58,237,.3)}
+.btn-ghost{background:#F5F3FF;color:#7C3AED;border:1.5px solid #EDE9FE}
+.card{background:#fff;border:1.5px solid #F3F0FF;border-radius:22px;padding:18px;margin:0 16px 12px;box-shadow:0 8px 24px rgba(124,58,237,.06)}
+.label{font-size:9px;font-weight:800;letter-spacing:.14em;color:#8B8BA7;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.small{font-size:11px;color:#6B7280;font-weight:600;line-height:1.5}
+.suggest{position:absolute;top:105%;left:0;right:0;background:#fff;border:1.5px solid #EDE9FE;border-radius:14px;max-height:200px;overflow:auto;z-index:100;box-shadow:0 16px 40px rgba(124,58,237,.15);display:none}
+.suggest div{padding:12px 14px;font-size:12px;cursor:pointer;border-bottom:1px solid #F8F5FF;display:flex;gap:8px;align-items:start}
+.suggest div:hover{background:#FAF7FF}
+.map-wrap{position:relative;border-radius:20px;overflow:hidden;border:1.8px solid #EDE9FE;margin-top:12px;box-shadow:0 8px 24px rgba(124,58,237,.08);background:#F5F3FF}
+#map{height:280px;z-index:1;background:#F5F3FF}
+#detailMap{height:180px;border-radius:12px;border:1.5px solid #EDE9FE;margin-top:10px}
+.map-badge{position:absolute;top:12px;left:12px;z-index:400;background:#fff;border:1px solid #EDE9FE;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.08);display:flex;gap:6px;align-items:center}
+.map-action{position:absolute;bottom:12px;right:12px;z-index:400;background:#7C3AED;color:#fff;border:none;border-radius:10px;width:40px;height:40px;display:grid;place-items:center;box-shadow:0 4px 12px rgba(124,58,237,.3);cursor:pointer}
+.distance-pill{position:absolute;bottom:12px;left:12px;z-index:400;background:linear-gradient(90deg,#7C3AED,#8B5CF6);color:#fff;border-radius:999px;padding:8px 14px;font-size:11px;font-weight:900;box-shadow:0 4px 12px rgba(124,58,237,.3);display:none}
+.pill{padding:8px 14px;border-radius:999px;font-size:11px;font-weight:800;border:1.5px solid #EDE9FE;background:#fff;cursor:pointer}
 .pill.active{background:#7C3AED;color:#fff;border-color:#7C3AED}
-.small{font-size:11px;color:#6B7280}
-.mapBox{height:200px;border-radius:14px;overflow:hidden;background:#F5F3FF;margin-top:8px;position:relative}
-.pass-row{display:flex;gap:8px;align-items:center;background:#FAF7FF;border:1px solid #EDE9FE;border-radius:12px;padding:8px;margin-top:6px}
+.tabs{display:flex;background:#F5F3FF;border-radius:12px;padding:4px;margin-bottom:12px;border:1px solid #EDE9FE}
+.tab{flex:1;padding:10px;border-radius:8px;text-align:center;font-weight:800;font-size:11px;cursor:pointer;color:#8B8BA7}
+.tab.active{background:#7C3AED;color:#fff;box-shadow:0 4px 12px rgba(124,58,237,.3)}
+.mode{display:flex;background:#F5F3FF;border-radius:14px;padding:4px;margin:12px 16px;border:1.5px solid #EDE9FE}
+.mode-btn{flex:1;padding:11px;border-radius:10px;text-align:center;font-weight:800;font-size:11px;cursor:pointer;border:none;background:transparent;color:#8B8BA7}
+.mode-btn.active{background:#fff;color:#7C3AED;box-shadow:0 4px 12px rgba(0,0,0,.06);border:1px solid #EDE9FE}
+.passenger-card{background:#FAF7FF;border:1.5px solid #EDE9FE;border-radius:14px;padding:12px;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="app">
-<div class="header">
-<div style="display:flex;gap:10px;align-items:center"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:grid;place-items:center;color:#fff"><i class="fa-solid fa-car"></i></div><div><div style="font-weight:900;font-size:13px">FLOOT DRIVER</div><div class="small">Car Pool • ₦60/km</div></div></div>
-<div style="display:flex;gap:8px;align-items:center"><span class="small" id="driverName">Driver</span><button id="logoutBtn" style="width:30px;height:30px;border-radius:8px;border:1px solid #F3F0FF;background:#fff"><i class="fa-solid fa-right-from-bracket"></i></button></div>
+<div id="authScreen" class="auth-bg">
+<div style="text-align:center;margin-bottom:16px"><div style="width:60px;height:60px;border-radius:16px;background:#fff;display:grid;place-items:center;color:#7C3AED;font-size:24px;margin:0 auto;box-shadow:0 8px 20px rgba(124,58,237,.2)"><i class="fa-solid fa-car-side"></i></div><div style="font-weight:900;margin-top:8px;color:#1F0A2E">FLOOT POOL DRIVER</div><div style="font-size:11px;color:#7C3AED;font-weight:800">White & Purple • View Trip Fixed • Rider Fare</div></div>
+<div class="auth-card">
+<div class="tabs"><div id="loginTab" class="tab active">Login</div><div id="regTab" class="tab">Register</div></div>
+<div id="loginForm">
+<div class="input-wrap"><i class="fa-solid fa-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="loginEmail" class="input" type="email" placeholder="Email" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="loginPass" class="input" type="password" placeholder="Password" style="padding-left:42px"></div>
+<button id="loginBtn" class="btn btn-primary">LOGIN</button><div id="loginMsg" class="small" style="text-align:center;margin-top:8px"></div>
+</div>
+<div id="regForm" style="display:none">
+<div class="input-wrap"><i class="fa-solid fa-user" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regName" class="input" placeholder="Full Name *" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-phone" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regPhone" class="input" placeholder="Phone *" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-envelope" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regEmail" class="input" type="email" placeholder="Email *" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-lock" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regPass" class="input" type="password" placeholder="Password *" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-car" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regCar" class="input" placeholder="Car Model *" style="padding-left:42px"></div>
+<div class="input-wrap"><i class="fa-solid fa-id-card" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#7C3AED"></i><input id="regPlate" class="input" placeholder="Plate *" style="padding-left:42px"></div>
+<button id="regBtn" class="btn btn-primary">CREATE ACCOUNT</button><div id="regMsg" class="small" style="text-align:center;margin-top:8px"></div>
+</div>
+</div>
 </div>
 
-<div class="tabs"><div class="tab active" id="tabCreate">Create Pool</div><div class="tab" id="tabActive">My Pools</div><div class="tab" id="tabEarnings">Earnings</div></div>
+<div class="app" id="mainApp" style="display:none">
+<div style="padding:14px 16px;background:#fff;border-bottom:1.5px solid #F3F0FF;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10">
+<div style="display:flex;gap:10px;align-items:center"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:grid;place-items:center;color:#fff"><i class="fa-solid fa-bolt"></i></div><div><div style="font-weight:900;font-size:13px">POOL DRIVER</div><div class="small" id="driverInfo">Driver</div></div></div>
+<button id="logoutBtn" style="width:32px;height:32px;border-radius:8px;border:1.5px solid #EDE9FE;background:#fff;color:#7C3AED"><i class="fa-solid fa-right-from-bracket"></i></button>
+</div>
+
+<div class="mode"><button class="mode-btn active" id="mCreate"><i class="fa-solid fa-plus"></i> Create Pool</button><button class="mode-btn" id="mPools"><i class="fa-solid fa-list"></i> My Trips</button><button class="mode-btn" id="mEarn"><i class="fa-solid fa-wallet"></i> Earnings</button></div>
 
 <div id="createView">
 <div class="card">
-<div class="label">CREATE POOL RIDE • Car Only</div>
-<div class="input-wrap"><i class="fa-solid fa-location-dot"></i><input id="poolFrom" class="input" placeholder="From (Your location) e.g. Yaba" value="Yaba"></div>
-<div class="input-wrap"><i class="fa-solid fa-flag-checkered"></i><input id="poolTo" class="input" placeholder="To (Destination) e.g. Ikorodu - Benson St" value="Ikorodu - Benson Street"></div>
-<div class="input-wrap"><i class="fa-solid fa-road"></i><input id="poolTotalKm" class="input" type="number" placeholder="Total route km e.g. 25" value="25"></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
-<div><div class="label">SEATS AVAILABLE</div><div style="display:flex;gap:6px"><button class="pill active" data-seats="3">3 seats</button><button class="pill" data-seats="4">4 seats</button></div></div>
-<div><div class="label">DEPARTURE</div><div style="display:flex;gap:6px"><button class="pill active" data-dep="now">Now</button><button class="pill" data-dep="10">10 min</button><button class="pill" data-dep="30">30 min</button></div></div>
+<div class="label"><span style="color:#7C3AED"><i class="fa-solid fa-map-location-dot"></i> CREATE POOL • Fixed Map • Rider Fare</span></div>
+<div class="input-wrap" style="z-index:30"><div class="pin pin-from"><i class="fa-solid fa-circle-dot"></i></div><input id="from" class="input" placeholder="From - e.g. Yaba, Lagos" autocomplete="off"><div id="fromSuggest" class="suggest"></div></div>
+<div class="input-wrap" style="z-index:20"><div class="pin pin-to"><i class="fa-solid fa-location-dot"></i></div><input id="to" class="input" placeholder="To - e.g. Ikorodu Benson, Lagos" autocomplete="off"><div id="toSuggest" class="suggest"></div></div>
+<div class="map-wrap"><div id="map"></div><div class="map-badge"><div style="width:8px;height:8px;background:#10B981;border-radius:50%"></div> OSM Free • No Key</div><button class="map-action" id="myLocBtn"><i class="fa-solid fa-crosshairs"></i></button><div class="distance-pill" id="distancePill"><span id="pillKm">0 km</span> • <span id="pillTime">0</span></div></div>
+<div id="distanceBox" style="display:none;background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;padding:14px;margin-top:12px">
+<div style="display:flex;justify-content:space-between"><span class="label">ROUTE</span><span style="background:#ECFDF5;color:#065F46;padding:2px 8px;border-radius:999px;font-size:9px;font-weight:900">LIVE</span></div>
+<div class="small" style="margin-top:6px">From: <b id="fromLabel">-</b><br>To: <b id="toLabel">-</b><br>Distance: <b id="googleKm" style="color:#7C3AED">- km</b> • <b id="googleTime">-</b></div>
+<div style="margin-top:10px;background:linear-gradient(135deg,#7C3AED,#8B5CF6);border-radius:12px;padding:10px;color:#fff"><div style="font-size:10px;font-weight:800;opacity:.8">RIDER-BASED FARE • Your total = sum of rider fares</div><div class="small" style="color:rgba(255,255,255,.9);margin-top:4px">Short 10km=₦1,100 • 22km=₦1,820 • <span id="exKm">0</span>km= <span id="exFare">₦0</span> example<br>Each rider different pickup→dropoff = different amount sent to you</div></div>
 </div>
-<div style="background:#F5F3FF;border:1px solid #EDE9FE;border-radius:12px;padding:10px;margin-top:12px">
-<div class="label">TARIFF • ₦60/km Per Passenger Distance</div>
-<div style="display:flex;justify-content:space-between" class="small"><span>Base</span><span>₦500 per passenger</span></div>
-<div style="display:flex;justify-content:space-between" class="small"><span>Rate</span><span>₦60/km × passenger km</span></div>
-<div style="display:flex;justify-content:space-between;margin-top:4px;font-weight:800;font-size:12px"><span>Example: Bus Stop 22km vs Benson 25km</span><span></span></div>
-<div style="display:flex;justify-content:space-between" class="small"><span>Ikorodu Bus Stop 22km</span><span style="font-weight:800">₦1,820</span></div>
-<div style="display:flex;justify-content:space-between" class="small"><span>Benson Street 25km</span><span style="font-weight:800;color:#7C3AED">₦2,000 (more km = more)</span></div>
-</div>
-<div class="mapBox"><div id="map" style="height:100%"></div></div>
-<button id="createPoolBtn" class="btn btn-primary" style="margin-top:12px"><i class="fa-solid fa-plus"></i> PUBLISH POOL RIDE</button>
-<div id="createMsg" class="small" style="text-align:center;margin-top:6px"></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="pill active" data-seats="3">3 seats</button><button class="pill" data-seats="4">4 seats</button></div>
+<button id="publishBtn" class="btn btn-primary" style="margin-top:12px;opacity:.4" disabled>Select From & To from dropdown</button>
+<div id="publishMsg" class="small" style="text-align:center;margin-top:8px"></div>
 </div>
 </div>
 
-<div id="activeView" style="display:none">
-<div class="card"><div class="label">MY ACTIVE POOLS</div><div id="poolsList"><div class="small">No active pool. Create one.</div></div></div>
-<div class="card" id="poolDetailCard" style="display:none"><div class="label">POOL DETAIL • Passengers</div><div id="poolDetail"></div><button id="startPoolBtn" class="btn btn-primary" style="margin-top:10px"><i class="fa-solid fa-play"></i> START TRIP • Verify OTPs</button></div>
+<div id="poolsView" style="display:none">
+<div class="card"><div class="label"><span>My Trips • Tap View Trip</span><span id="tripCountBadge" style="background:#7C3AED;color:#fff;padding:3px 10px;border-radius:999px;font-size:10px">0</span></div><div id="poolsList"><div class="small" style="text-align:center;padding:16px;background:#FAF7FF;border:1px dashed #EDE9FE;border-radius:12px">No trips yet<br>Create pool above</div></div></div>
+<div class="card" id="detailCard" style="display:none">
+<div id="detailBox"></div>
+<div id="detailMapWrap" style="display:none"><div class="label" style="margin-top:12px">Trip Route Map</div><div id="detailMap"></div></div>
+<div style="display:flex;gap:8px;margin-top:14px"><button id="cancelTripBtn" style="flex:1;background:#FEF2F2;color:#EF4444;border:1.5px solid #FECACA;border-radius:12px;padding:12px;font-weight:800;font-size:12px">CANCEL WHOLE TRIP</button><button id="startTripBtn" class="btn btn-primary" style="flex:1">START TRIP</button></div>
+<button id="closeDetailBtn" class="btn btn-ghost" style="margin-top:8px">Close Details</button>
+</div>
 </div>
 
-<div id="earningsView" style="display:none">
-<div class="card"><div class="label">TODAY EARNINGS • Car Pool 60/km</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div style="background:#F5F3FF;border-radius:12px;padding:10px"><div class="small">Total Trips</div><div style="font-weight:900;font-size:18px" id="totalTrips">0</div></div><div style="background:#ECFDF5;border-radius:12px;padding:10px"><div class="small">Total Collected</div><div style="font-weight:900;font-size:18px;color:#065F46" id="totalEarn">₦0</div></div></div></div>
+<div id="earnView" style="display:none">
+<div class="card"><div class="label">Earnings • Sum of rider fares</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><div style="background:#F5F3FF;border-radius:12px;padding:12px"><div class="small">Trips</div><div style="font-weight:900;font-size:20px" id="tripCount">0</div></div><div style="background:linear-gradient(135deg,#7C3AED,#8B5CF6);border-radius:12px;padding:12px;color:#fff"><div class="small" style="color:rgba(255,255,255,.8)">Collected</div><div style="font-weight:900;font-size:20px" id="totalEarn">₦0</div></div></div></div>
 </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyBVIJq5napb_egiLdKhGtySZoPeLUkY9Q4",
-  authDomain: "floot-delivery.firebaseapp.com",
-  projectId: "floot-delivery",
-  storageBucket: "floot-delivery.firebasestorage.app",
-  messagingSenderId: "786230599434",
-  appId: "1:786230599434:web:e1913bd8c2e69a7e1c64f3"
-};
+import { getFirestore, collection, doc, setDoc, getDoc, addDoc, query, orderBy, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+const firebaseConfig = { apiKey: "AIzaSyBVIJq5napb_egiLdKhGtySZoPeLUkY9Q4", authDomain: "floot-delivery.firebaseapp.com", projectId: "floot-delivery", storageBucket: "floot-delivery.firebasestorage.app", messagingSenderId: "786230599434", appId: "1:786230599434:web:e1913bd8c2e69a7e1c64f3" };
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-let seats=3, dep="now", currentDriver={id:"driver_001",name:"Musa Car"}, map, activePoolId=null;
-function loadDriver(){ const s=JSON.parse(localStorage.getItem("floot_driver_session")||"null") || currentDriver; document.getElementById("driverName").textContent=s.name||"Driver"; currentDriver=s; } loadDriver();
-document.getElementById("tabCreate").onclick=()=>{ document.getElementById("createView").style.display="block"; document.getElementById("activeView").style.display="none"; document.getElementById("earningsView").style.display="none"; document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active")); document.getElementById("tabCreate").classList.add("active"); setTimeout(()=>{ if(map) map.invalidateSize(); },200); };
-document.getElementById("tabActive").onclick=()=>{ document.getElementById("createView").style.display="none"; document.getElementById("activeView").style.display="block"; document.getElementById("earningsView").style.display="none"; document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active")); document.getElementById("tabActive").classList.add("active"); };
-document.getElementById("tabEarnings").onclick=()=>{ document.getElementById("createView").style.display="none"; document.getElementById("activeView").style.display="none"; document.getElementById("earningsView").style.display="block"; document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active")); document.getElementById("tabEarnings").classList.add("active"); };
+let currentDriver=null, seats=3, activePoolId=null, fromPlace=null, toPlace=null, calculatedKm=0, calculatedTime="", map, detailMap, markers=[], detailMarkers=[], routeLine, detailRouteLine, routeGlow, detailRouteGlow, allMyPools=[];
+
+function initMaps(){
+  map=L.map('map',{zoomControl:false,attributionControl:false}).setView([6.5244,3.3792],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+  detailMap=L.map('detailMap',{zoomControl:false,attributionControl:false}).setView([6.5244,3.3792],11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(detailMap);
+  window.fromIcon=L.divIcon({html:'<div style="width:32px;height:32px;background:#10B981;border:3px solid #fff;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(16,185,129,.4)"><i class="fa-solid fa-circle-dot" style="font-size:12px"></i></div>',className:'',iconSize:[32,32],iconAnchor:[16,16]});
+  window.toIcon=L.divIcon({html:'<div style="width:32px;height:32px;background:#EF4444;border:3px solid #fff;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 4px 12px rgba(239,68,68,.4)"><i class="fa-solid fa-location-dot" style="font-size:12px"></i></div>',className:'',iconSize:[32,32],iconAnchor:[16,16]});
+}
+initMaps();
+
+async function searchLocation(q){ if(!q||q.length<3) return []; try{ const url=`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&countrycodes=ng&limit=5`; const r=await fetch(url); const j=await r.json(); return j.map(o=>({label:o.display_name, main:o.display_name.split(",").slice(0,2).join(","), sub:o.display_name.split(",").slice(2,4).join(","), lat:parseFloat(o.lat), lng:parseFloat(o.lon)})); }catch{ return []; } }
+function showSuggest(id,list,onPick){ const box=document.getElementById(id); if(list.length===0){ box.style.display="none"; return; } box.innerHTML=list.map(p=>`<div><div style="width:28px;height:28px;border-radius:8px;background:#F5F3FF;display:grid;place-items:center;color:#7C3AED;font-size:11px;flex-shrink:0"><i class="fa-solid fa-location-dot"></i></div><div style="flex:1"><div style="font-weight:700;font-size:12px">${p.main}</div><div style="font-size:10px;color:#8B8BA7">${p.sub}</div></div></div>`).join(''); box.style.display="block"; Array.from(box.children).forEach((row,i)=>{ row.onclick=()=>{ onPick(list[i]); box.style.display="none"; }; }); }
+let ft=null, tt=null;
+document.getElementById("from").addEventListener("input", function(){ clearTimeout(ft); const v=this.value; ft=setTimeout(async()=>{ const r=await searchLocation(v); showSuggest("fromSuggest",r,p=>{ fromPlace=p; document.getElementById("from").value=p.main; document.getElementById("fromLabel").textContent=p.main; updateMap(); if(fromPlace&&toPlace) calcRoute(); }); },400); });
+document.getElementById("to").addEventListener("input", function(){ clearTimeout(tt); const v=this.value; tt=setTimeout(async()=>{ const r=await searchLocation(v); showSuggest("toSuggest",r,p=>{ toPlace=p; document.getElementById("to").value=p.main; document.getElementById("toLabel").textContent=p.main; updateMap(); if(fromPlace&&toPlace) calcRoute(); }); },400); });
+function updateMap(){ markers.forEach(m=>map.removeLayer(m)); markers=[]; if(fromPlace) markers.push(L.marker([fromPlace.lat,fromPlace.lng],{icon:window.fromIcon}).addTo(map)); if(toPlace) markers.push(L.marker([toPlace.lat,toPlace.lng],{icon:window.toIcon}).addTo(map)); if(fromPlace&&toPlace) map.fitBounds(L.latLngBounds([[fromPlace.lat,fromPlace.lng],[toPlace.lat,toPlace.lng]]),{padding:[50,50]}); }
+async function calcRoute(){ if(!fromPlace||!toPlace) return; try{ const url=`https://router.project-osrm.org/route/v1/driving/${fromPlace.lng},${fromPlace.lat};${toPlace.lng},${toPlace.lat}?overview=full&geometries=geojson`; const r=await fetch(url); const j=await r.json(); if(j.routes&&j.routes[0]){ const route=j.routes[0]; calculatedKm=Math.round((route.distance/1000)*10)/10; calculatedTime=Math.round(route.duration/60)+" mins"; if(routeLine) map.removeLayer(routeLine); if(routeGlow) map.removeLayer(routeGlow); routeGlow=L.geoJSON(route.geometry,{style:{color:"#A78BFA",weight:12,opacity:0.25}}).addTo(map); routeLine=L.geoJSON(route.geometry,{style:{color:"#7C3AED",weight:6,opacity:0.95}}).addTo(map); document.getElementById("googleKm").textContent=calculatedKm+" km"; document.getElementById("googleTime").textContent=calculatedTime; document.getElementById("pillKm").textContent=calculatedKm+" km"; document.getElementById("pillTime").textContent=calculatedTime; document.getElementById("distancePill").style.display="flex"; document.getElementById("exKm").textContent=calculatedKm; document.getElementById("exFare").textContent="₦"+(500+calculatedKm*60).toLocaleString(); document.getElementById("distanceBox").style.display="block"; const btn=document.getElementById("publishBtn"); btn.disabled=false; btn.style.opacity="1"; btn.innerHTML='<i class="fa-solid fa-bolt"></i> PUBLISH POOL - '+calculatedKm+'km • Rider fares from riders'; } }catch(e){ console.error(e); } }
+document.getElementById("myLocBtn").onclick=()=>{ if(!navigator.geolocation) return; navigator.geolocation.getCurrentPosition(pos=>{ fromPlace={label:"My Location", main:"My Location", lat:pos.coords.latitude, lng:pos.coords.longitude}; document.getElementById("from").value="My Location"; document.getElementById("fromLabel").textContent="My Location"; updateMap(); if(fromPlace&&toPlace) calcRoute(); }); };
 document.querySelectorAll("[data-seats]").forEach(b=>b.onclick=function(){ document.querySelectorAll("[data-seats]").forEach(x=>x.classList.remove("active")); this.classList.add("active"); seats=parseInt(this.dataset.seats); });
-document.querySelectorAll("[data-dep]").forEach(b=>b.onclick=function(){ document.querySelectorAll("[data-dep]").forEach(x=>x.classList.remove("active")); this.classList.add("active"); dep=this.dataset.dep; });
-setTimeout(()=>{ map=L.map('map',{zoomControl:false,attributionControl:false}).setView([6.55,3.35],10); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map); const latlngs=[[6.51,3.37],[6.52,3.45],[6.60,3.50]]; L.polyline(latlngs,{color:"#7C3AED",weight:4}).addTo(map); L.marker(latlngs[0]).addTo(map).bindPopup("Yaba"); L.marker(latlngs[2]).addTo(map).bindPopup("Ikorodu Benson"); },500);
-document.getElementById("createPoolBtn").onclick=async()=>{
-  const from=document.getElementById("poolFrom").value.trim(); const to=document.getElementById("poolTo").value.trim(); const totalKm=parseFloat(document.getElementById("poolTotalKm").value)||25; const msg=document.getElementById("createMsg");
-  if(!from||!to){ msg.textContent="Enter from & to"; return; } msg.textContent="Publishing pool...";
-  try{ await addDoc(collection(db,"pool_rides"),{ driverId:currentDriver.id, driverName:currentDriver.name||"Driver", from:from, to:to, totalRouteKm:totalKm, maxSeats:seats, occupied:0, seatsLeft:seats, baseFare:500, ratePerKm:60, minFare:800, departure:dep, status:"waiting", passengers:[], totalCollected:0, createdAt:new Date().toISOString() }); msg.textContent="✓ Pool published! Seats: "+seats; setTimeout(()=>{ document.getElementById("tabActive").click(); },800); }catch(e){ msg.textContent=e.message; }
+
+function saveSession(p){ localStorage.setItem("floot_pool_driver_session",JSON.stringify(p)); try{ document.cookie=`floot_pool_driver_session=${encodeURIComponent(JSON.stringify(p))}; path=/; max-age=2592000; SameSite=Lax`; }catch{} }
+function loadSession(){ try{ const s=localStorage.getItem("floot_pool_driver_session"); if(s) return JSON.parse(s); }catch{} try{ const m=document.cookie.match(/floot_pool_driver_session=([^;]+)/); if(m) return JSON.parse(decodeURIComponent(m[1])); }catch{} return null; }
+const saved=loadSession(); if(saved) doLogin(saved);
+function doLogin(p){ currentDriver=p; document.getElementById("authScreen").style.display="none"; document.getElementById("mainApp").style.display="flex"; document.getElementById("driverInfo").textContent=`${p.name} • ${p.car||"Car"} • ${p.plate||""}`; listenMyPools(); setTimeout(()=>{ map.invalidateSize(); detailMap.invalidateSize(); },500); }
+
+document.getElementById("loginTab").onclick=()=>{ document.getElementById("loginTab").classList.add("active"); document.getElementById("regTab").classList.remove("active"); document.getElementById("loginForm").style.display="block"; document.getElementById("regForm").style.display="none"; };
+document.getElementById("regTab").onclick=()=>{ document.getElementById("regTab").classList.add("active"); document.getElementById("loginTab").classList.remove("active"); document.getElementById("loginForm").style.display="none"; document.getElementById("regForm").style.display="block"; };
+document.getElementById("regBtn").onclick=async()=>{ const name=document.getElementById("regName").value.trim(); const phone=document.getElementById("regPhone").value.trim(); const email=document.getElementById("regEmail").value.trim().toLowerCase(); const pass=document.getElementById("regPass").value.trim(); const car=document.getElementById("regCar").value.trim(); const plate=document.getElementById("regPlate").value.trim(); const msg=document.getElementById("regMsg"); if(!name||!phone||!email||!pass||!car||!plate){ msg.textContent="Fill all"; return; } msg.textContent="Creating..."; try{ const id=email.replace(/[^a-z0-9]/g,"_"); const data={id,name,phone,email,password:pass,car,plate,defaultSeats:"3",createdAt:new Date().toISOString()}; await setDoc(doc(db,"pool_drivers",id),data); saveSession(data); doLogin(data); }catch(e){ msg.textContent=e.message; } };
+document.getElementById("loginBtn").onclick=async()=>{ const email=document.getElementById("loginEmail").value.trim().toLowerCase(); const pass=document.getElementById("loginPass").value.trim(); const msg=document.getElementById("loginMsg"); if(!email||!pass){ msg.textContent="Enter email/pass"; return; } msg.textContent="Logging..."; try{ const id=email.replace(/[^a-z0-9]/g,"_"); const snap=await getDoc(doc(db,"pool_drivers",id)); if(!snap.exists()){ msg.textContent="No account. Register."; return; } const d=snap.data(); if(d.password!==pass){ msg.textContent="Wrong password"; return; } saveSession(d); doLogin(d); }catch(e){ msg.textContent=e.message; } };
+document.getElementById("logoutBtn").onclick=()=>{ localStorage.removeItem("floot_pool_driver_session"); location.reload(); };
+
+document.getElementById("mCreate").onclick=()=>setMode("create"); document.getElementById("mPools").onclick=()=>setMode("pools"); document.getElementById("mEarn").onclick=()=>setMode("earn");
+function setMode(m){
+  document.getElementById("createView").style.display="none"; document.getElementById("poolsView").style.display="none"; document.getElementById("earnView").style.display="none";
+  document.querySelectorAll(".mode-btn").forEach(b=>b.classList.remove("active"));
+  if(m==="create"){ document.getElementById("createView").style.display="block"; document.getElementById("mCreate").classList.add("active"); setTimeout(()=>map.invalidateSize(),200); }
+  if(m==="pools"){ document.getElementById("poolsView").style.display="block"; document.getElementById("mPools").classList.add("active"); setTimeout(()=>detailMap.invalidateSize(),200); }
+  if(m==="earn"){ document.getElementById("earnView").style.display="block"; document.getElementById("mEarn").classList.add("active"); }
+}
+
+document.getElementById("publishBtn").onclick=async()=>{
+  if(!fromPlace||!toPlace||!calculatedKm){ alert("Select From & To from dropdown"); return; }
+  const msg=document.getElementById("publishMsg"); msg.textContent="Publishing...";
+  try{
+    await addDoc(collection(db,"pool_rides"),{
+      driverId:currentDriver.id, driverName:currentDriver.name, driverPhone:currentDriver.phone, car:currentDriver.car, plate:currentDriver.plate,
+      from:fromPlace.label||fromPlace.main, to:toPlace.label||toPlace.main,
+      fromLat:fromPlace.lat, fromLng:fromPlace.lng, toLat:toPlace.lat, toLng:toPlace.lng,
+      totalRouteKm:calculatedKm, duration:calculatedTime,
+      maxSeats:seats, occupied:0, seatsLeft:seats,
+      baseFare:500, ratePerKm:60, status:"waiting",
+      passengers:[], totalCollected:0,
+      createdAt:new Date().toISOString()
+    });
+    msg.textContent="✓ Pool published "+calculatedKm+"km • Rider fares from riders";
+    setTimeout(()=>setMode("pools"),800);
+  }catch(e){ msg.textContent=e.message; }
 };
-const q=query(collection(db,"pool_rides"), orderBy("createdAt","desc"));
-onSnapshot(q, snap=>{
-  const pools=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>p.driverId===currentDriver.id);
-  const list=document.getElementById("poolsList"); if(pools.length===0){ list.innerHTML='<div class="small">No active pool</div>'; return; }
-  let total=0; list.innerHTML=pools.map(p=>{ total+=p.totalCollected||0; return `<div style="background:${p.status==='waiting'?'#FAF7FF':'#ECFDF5'};border:1px solid ${p.status==='waiting'?'#EDE9FE':'#A7F3D0'};border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer" onclick="openPool('${p.id}')"><div style="display:flex;justify-content:space-between"><span style="font-weight:800;font-size:12px">${p.from} → ${p.to}</span><span style="font-size:10px;padding:3px 8px;border-radius:999px;background:${p.status==='waiting'?'#FEF3C7':'#A7F3D0'}">${p.status} • ${p.seatsLeft} left</span></div><div class="small" style="margin-top:4px">Seats ${p.occupied}/${p.maxSeats} • ₦${p.ratePerKm}/km • Total: ₦${(p.totalCollected||0).toLocaleString()}</div></div>`; }).join(''); document.getElementById("totalTrips").textContent=pools.length; document.getElementById("totalEarn").textContent="₦"+total.toLocaleString();
-});
+
+function listenMyPools(){
+  const q=query(collection(db,"pool_rides"),orderBy("createdAt","desc"));
+  onSnapshot(q,snap=>{
+    const pools=snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>!currentDriver||p.driverId===currentDriver.id);
+    allMyPools=pools;
+    const list=document.getElementById("poolsList");
+    document.getElementById("tripCountBadge").textContent=pools.length+" trips";
+    if(pools.length===0){ list.innerHTML='<div class="small" style="text-align:center;padding:20px;background:#FAF7FF;border:1px dashed #EDE9FE;border-radius:14px"><i class="fa-solid fa-car-side" style="font-size:22px;color:#A78BFA"></i><div style="margin-top:8px;font-weight:800">No trips yet</div><div>Create pool above - then View Trip will work</div></div>'; return; }
+    list.innerHTML=pools.map(p=>`<div style="background:#fff;border:1.5px solid ${p.status==="waiting"?"#EDE9FE":"#FECACA"};border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 4px 12px rgba(124,58,237,.06)">
+      <div style="display:flex;justify-content:space-between;align-items:start"><span style="font-weight:800;font-size:13px;max-width:60%">${(p.from||"").split(",").slice(0,2).join(",")} → ${(p.to||"").split(",").slice(0,2).join(",")}</span><span style="font-size:9px;padding:4px 8px;border-radius:999px;background:${p.status==="waiting"?"#F5F3FF":"#FEF2F2"};color:${p.status==="waiting"?"#7C3AED":"#EF4444"};font-weight:800;border:1px solid ${p.status==="waiting"?"#EDE9FE":"#FECACA"}">${p.status} • ${p.seatsLeft} left</span></div>
+      <div class="small" style="margin-top:6px">${p.totalRouteKm}km • ${p.duration||""} • ${p.occupied||0}/${p.maxSeats} joined • Total from riders <b style="color:#7C3AED">₦${(p.totalCollected||0).toLocaleString()}</b></div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="openPool('${p.id}')" style="flex:1;background:#7C3AED;color:#fff;border:none;border-radius:10px;padding:10px;font-weight:800;font-size:11px"><i class="fa-solid fa-eye"></i> VIEW TRIP</button>
+        ${p.status==="waiting"?`<button onclick="cancelTrip('${p.id}')" style="flex:1;background:#FEF2F2;color:#EF4444;border:1.5px solid #FECACA;border-radius:10px;padding:10px;font-weight:800;font-size:11px"><i class="fa-solid fa-xmark"></i> Cancel</button>`:""}
+      </div>
+    </div>`).join('');
+    let total=0; pools.forEach(p=>total+=p.totalCollected||0);
+    document.getElementById("tripCount").textContent=pools.length;
+    document.getElementById("totalEarn").textContent="₦"+total.toLocaleString();
+  });
+}
+
 window.openPool=async(id)=>{
-  const snap=await getDoc(doc(db,"pool_rides",id)); if(!snap.exists()) return; const p={id:snap.id,...snap.data()}; activePoolId=id; document.getElementById("poolDetailCard").style.display="block"; const det=document.getElementById("poolDetail");
-  if(p.passengers.length===0){ det.innerHTML='<div class="small">No passengers yet.<br>Bus Stop 22km=₦1,820<br>Benson 25km=₦2,000</div>'; }
-  else{ det.innerHTML=p.passengers.map((ps,i)=>`<div class="pass-row"><div style="width:32px;height:32px;border-radius:8px;background:#EDE9FE;display:grid;place-items:center;font-weight:800;color:#7C3AED">${i+1}</div><div style="flex:1"><div style="font-weight:800;font-size:12px">${ps.name||"Customer"} → ${ps.dropoff}</div><div class="small">${ps.distanceKm}km × ₦60 + ₦500 = ₦${ps.fare.toLocaleString()} • OTP ${ps.otp}</div></div><div style="font-weight:900;color:#7C3AED">₦${ps.fare.toLocaleString()}</div></div>`).join('') + `<div style="margin-top:8px;display:flex;justify-content:space-between;font-weight:900"><span>Total</span><span style="color:#7C3AED">₦${(p.totalCollected||0).toLocaleString()}</span></div>`; }
+  activePoolId=id;
+  const snap=await getDoc(doc(db,"pool_rides",id));
+  if(!snap.exists()){ alert("Trip not found"); return; }
+  const p={id:snap.id,...snap.data()};
+  document.getElementById("detailCard").style.display="block";
+  document.getElementById("detailMapWrap").style.display="block";
+  const box=document.getElementById("detailBox");
+
+  setTimeout(()=>{
+    detailMarkers.forEach(m=>detailMap.removeLayer(m)); detailMarkers=[];
+    if(detailRouteLine) detailMap.removeLayer(detailRouteLine);
+    if(detailRouteGlow) detailMap.removeLayer(detailRouteGlow);
+    if(p.fromLat&&p.toLat){
+      const fromM=L.marker([p.fromLat,p.fromLng],{icon:window.fromIcon}).addTo(detailMap); detailMarkers.push(fromM);
+      const toM=L.marker([p.toLat,p.toLng],{icon:window.toIcon}).addTo(detailMap); detailMarkers.push(toM);
+      detailMap.fitBounds(L.latLngBounds([[p.fromLat,p.fromLng],[p.toLat,p.toLng]]),{padding:[30,30]});
+      fetch(`https://router.project-osrm.org/route/v1/driving/${p.fromLng},${p.fromLat};${p.toLng},${p.toLat}?overview=full&geometries=geojson`).then(r=>r.json()).then(j=>{
+        if(j.routes&&j.routes[0]){
+          const geom=j.routes[0].geometry;
+          detailRouteGlow=L.geoJSON(geom,{style:{color:"#A78BFA",weight:10,opacity:0.25}}).addTo(detailMap);
+          detailRouteLine=L.geoJSON(geom,{style:{color:"#7C3AED",weight:5}}).addTo(detailMap);
+        }
+      });
+    }
+    detailMap.invalidateSize();
+  },300);
+
+  let h=`<div style="display:flex;justify-content:space-between;align-items:start"><div><div style="font-weight:900;font-size:14px;color:#1F0A2E">${(p.from||"").split(",").slice(0,2).join(",")} → ${(p.to||"").split(",").slice(0,2).join(",")}</div><div class="small" style="margin-top:4px">${p.totalRouteKm}km • ${p.duration||""} • ${p.car} ${p.plate} • Status <b style="color:#7C3AED">${p.status}</b></div><div class="small" style="margin-top:2px">${p.occupied||0}/${p.maxSeats} joined • Total from riders <b style="color:#7C3AED">₦${(p.totalCollected||0).toLocaleString()}</b></div></div><span style="background:#F5F3FF;border:1px solid #EDE9FE;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:800">${p.seatsLeft} seats left</span></div>`;
+
+  if(!p.passengers||p.passengers.length===0){
+    h+=`<div style="margin-top:12px;background:#FAF7FF;border:1.5px solid #EDE9FE;border-radius:12px;padding:12px;text-align:center" class="small"><i class="fa-solid fa-users" style="font-size:20px;color:#A78BFA"></i><div style="margin-top:6px;font-weight:800">No riders yet</div><div>Waiting for riders along your route<br>Each rider fare = their pickup→dropoff km × ₦60 + ₦500<br>Short = cheaper, long = more<br><br><b>Example:</b> Rider Sabo→Ikorodu Garage 15km = ₦1,400 • Yaba→Benson 25km = ₦2,000</div></div>`;
+  }else{
+    h+=`<div style="margin-top:12px"><div class="label"><span>Riders • Fare from riders • Cancel particular rider</span></div>`;
+    h+=p.passengers.map((ps,i)=>`<div class="passenger-card"><div style="display:flex;justify-content:space-between;align-items:start"><div style="flex:1"><div style="font-weight:800;font-size:12px;color:#1F0A2E">${i+1}. ${ps.name||"Rider"} • OTP <span style="color:#7C3AED">${ps.otp}</span></div><div class="small" style="margin-top:2px"><i class="fa-solid fa-circle-dot" style="color:#10B981;font-size:8px"></i> ${ (ps.pickup||"").split(",").slice(0,2).join(",") } <br><i class="fa-solid fa-location-dot" style="color:#EF4444;font-size:8px"></i> ${ (ps.dropoff||"").split(",").slice(0,2).join(",") }</div><div class="small" style="margin-top:4px;background:#fff;border:1px solid #EDE9FE;border-radius:8px;padding:6px;display:inline-block">${ps.distanceKm}km × ₦60 + ₦500 = <b style="color:#7C3AED">₦${ps.fare.toLocaleString()}</b></div></div><div style="text-align:right"><div style="font-weight:900;color:#7C3AED;font-size:16px">₦${ps.fare.toLocaleString()}</div><button onclick="cancelRider('${p.id}','${ps.joinedAt}')" style="margin-top:6px;background:#FEF2F2;color:#EF4444;border:1px solid #FECACA;border-radius:8px;padding:6px 10px;font-size:10px;font-weight:800"><i class="fa-solid fa-xmark"></i> Cancel this rider</button></div></div></div>`).join('');
+    h+=`</div><div style="margin-top:12px;background:#1F0A2E;color:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:11px;opacity:.7">Total collected from riders</span><span style="font-weight:900;font-size:18px;color:#A78BFA">₦${(p.totalCollected||0).toLocaleString()}</span></div>`;
+  }
+  box.innerHTML=h;
+  setMode("pools");
+  window.scrollTo({top:document.getElementById("detailCard").offsetTop-100,behavior:"smooth"});
 };
+
+window.cancelTrip=async(id)=>{
+  if(!confirm("Cancel whole trip? All riders will see trip cancelled.")) return;
+  try{ await updateDoc(doc(db,"pool_rides",id),{status:"cancelled",cancelledAt:new Date().toISOString()}); document.getElementById("detailCard").style.display="none"; alert("Trip cancelled"); }catch(e){ alert(e.message); }
+};
+window.cancelRider=async(poolId, joinedAt)=>{
+  if(!confirm("Cancel this particular rider? Their fare will be removed and seat freed.")) return;
+  try{
+    const ref=doc(db,"pool_rides",poolId);
+    const snap=await getDoc(ref);
+    if(!snap.exists()) return;
+    const p=snap.data();
+    const passengers=p.passengers||[];
+    const idx=passengers.findIndex(ps=>ps.joinedAt===joinedAt);
+    if(idx===-1){ alert("Rider not found"); return; }
+    const removed=passengers[idx];
+    passengers.splice(idx,1);
+    await updateDoc(ref,{ passengers, occupied:passengers.length, seatsLeft:p.maxSeats-passengers.length, totalCollected:(p.totalCollected||0)-removed.fare });
+    alert(`Rider ${removed.name} cancelled. ₦${removed.fare} removed. Seat freed.`);
+  }catch(e){ alert(e.message); }
+};
+
+document.getElementById("cancelTripBtn").onclick=()=>{ if(activePoolId) cancelTrip(activePoolId); };
+document.getElementById("startTripBtn").onclick=async()=>{ if(!activePoolId) return; try{ await updateDoc(doc(db,"pool_rides",activePoolId),{status:"ongoing",startedAt:new Date().toISOString()}); alert("Trip started - verify OTPs"); }catch(e){ alert(e.message); } };
+document.getElementById("closeDetailBtn").onclick=()=>{ document.getElementById("detailCard").style.display="none"; };
 </script>
 </body>
 </html>
