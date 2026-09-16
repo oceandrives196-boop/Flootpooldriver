@@ -3,75 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Floot Driver - Cancel Button Restored</title>
+<title>Floot Driver - Ultra Simple Fixed</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#F5F3FF}
-body{font-family:Inter,-apple-system,sans-serif}
-.app{position:relative;width:100%;height:100dvh;max-width:480px;margin:0 auto;background:#fff;display:flex;flex-direction:column;overflow:hidden}
-#poolMap{position:absolute;inset:0;z-index:1;width:100%;height:100%}
-.bolt-header{position:absolute;top:0;left:0;right:0;z-index:10;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
-.bolt-header > *{pointer-events:auto}
-.profile-pill{background:#fff;border-radius:999px;padding:6px 14px 6px 6px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:1px solid #F3F0FF}
-.avatar{width:32px;height:32px;border-radius:50%;background:#7C3AED;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px}
-.icon-btn{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid #F3F0FF;box-shadow:0 4px 20px rgba(0,0,0,.12);display:grid;place-items:center;cursor:pointer}
-.bottom-sheet{position:absolute;bottom:0;left:0;right:0;z-index:20;background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.14);max-height:86dvh;display:flex;flex-direction:column}
-.sheet-handle{width:36px;height:4px;background:#E9E5FF;border-radius:999px;margin:12px auto 0}
-.sheet-tabs{display:flex;gap:6px;padding:12px 12px 10px;background:#fff;border-radius:28px 28px 0 0;overflow-x:auto}
-.sheet-tab{flex:1;min-width:70px;padding:12px 6px;border-radius:999px;border:none;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
-.sheet-tab.active{background:#7C3AED;color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3)}
-.sheet-tab:not(.active){background:#F5F3FF;color:#6B7280}
-.badge{background:#fff;color:#7C3AED;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:900;margin-left:3px;min-width:18px;text-align:center}
-.sheet-content{overflow-y:auto;padding:0 14px 20px;flex:1}
-.bolt-input-group{position:relative;margin-bottom:12px}
-.bolt-input{width:100%;background:#F8F7FF;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px 16px 16px 48px;font-size:14px;font-weight:600;outline:none;color:#1F1A2E}
-.input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:12px}
-.icon-from{background:#ECFDF5;color:#10B981}
-.icon-to{background:#FEF2F2;color:#EF4444}
-.icon-seat{background:#F5F3FF;color:#7C3AED}
-.route-line{position:absolute;left:29px;top:42px;bottom:-8px;width:2px;background:repeating-linear-gradient(to bottom,#EDE9FE 0 6px,transparent 6px 12px);z-index:0}
-.bolt-card{background:#F8F7FF;border:1px solid #EDE9FE;border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
-.bolt-btn{width:100%;border:none;border-radius:16px;padding:16px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
-.bolt-btn-primary{background:#7C3AED;color:#fff;box-shadow:0 8px 20px rgba(124,58,237,.25)}
-.rider-card-exact{background:#fff;border:2px solid #7C3AED;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(124,58,237,.08)}
-.rider-card-accepted{background:#fff;border:2px solid #10B981;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(16,185,129,.08)}
-.rider-card-picked{background:#fff;border:2px solid #F59E0B;border-radius:20px;padding:16px;margin-bottom:12px}
-.trip-card-active{background:#fff;border:2px solid #7C3AED;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(124,58,237,.15)}
-.trip-card-full{background:#fff;border:2px solid #EF4444;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(239,68,68,.12)}
-.history-card{background:#fff;border:1.5px solid #E5E7EB;border-radius:16px;padding:14px;margin-bottom:10px;opacity:.9}
-.otp-hidden{background:#1F1A2E;color:#fff;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px dashed #4B5563}
-.otp-hidden-yellow{background:#FFFBEB;color:#92400E;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px dashed #FCD34D}
-.collect-box{background:#ECFDF5;color:#065F46;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px solid #A7F3D0}
-.accept-btn{background:#7C3AED;color:#fff;border:none;border-radius:999px;padding:14px;font-weight:800;font-size:14px;flex:1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.call-btn{background:#F5F3FF;color:#7C3AED;border:none;border-radius:999px;padding:14px;flex:1;cursor:pointer;display:grid;place-items:center}
-.decline-btn{background:#FFF1F2;color:#BE123C;border:none;border-radius:999px;padding:14px;flex:1;cursor:pointer;display:grid;place-items:center}
-.cancel-trip-btn{background:#FFF1F2;color:#BE123C;border:1.5px solid #FFE4E6;border-radius:999px;padding:12px;font-weight:800;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#8B8BA7;margin-bottom:6px;text-transform:uppercase}
-.small{font-size:11px;color:#6B7280}
-.suggest{position:absolute;left:0;right:0;top:56px;background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;z-index:50;max-height:180px;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.15);display:none}
-.suggest div{padding:12px 14px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:1px solid #F5F3FF}
-.uber-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);z-index:9999;display:none;align-items:flex-end;justify-content:center}
-.uber-overlay.show{display:flex}
-.uber-popup{width:100%;max-width:480px;background:#fff;border-radius:28px 28px 0 0;max-height:92dvh;display:flex;flex-direction:column;animation:slideUp .35s cubic-bezier(.32,.72,0,1);overflow:hidden}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.uber-header{background:#1F1A2E;color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
-.uber-map-preview{width:100%;height:160px;background:#F5F3FF;position:relative;overflow:hidden}
-.pulse-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:#7C3AED;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 8px rgba(124,58,237,.2);animation:pulse 1.5s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.6)}70%{box-shadow:0 0 0 18px rgba(124,58,237,0)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0)}}
-.uber-body{padding:20px;overflow-y:auto;flex:1}
-.countdown-ring{width:52px;height:52px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;display:grid;place-items:center;font-weight:900;font-size:16px}
-.notification{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1F1A2E;color:#fff;padding:14px 18px;border-radius:16px;z-index:10000;display:none;max-width:90%;font-size:13px;font-weight:600;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.notification.show{display:flex}
-.auth-bg{background:#fff;min-height:100dvh;display:flex;flex-direction:column;padding:0;position:fixed;inset:0;z-index:10000}
-.auth-top{height:42dvh;background:linear-gradient(180deg,#7C3AED 0%, #5B21B6 100%);border-radius:0 0 32px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
-.auth-card{flex:1;background:#fff;margin-top:-24px;border-radius:32px 32px 0 0;padding:24px 20px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.08);overflow-y:auto}
-.end-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px}
-.end-overlay.show{display:flex}
-.end-modal{width:100%;max-width:360px;background:#fff;border-radius:24px;padding:24px;text-align:center;animation:popIn .3s ease}
-@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
+body{font-family:Inter,system-ui,sans-serif;background:#F5F3FF;margin:0}
+.app{max-width:480px;margin:0 auto;background:#fff;min-height:100dvh;position:relative}
+#map{width:100%;height:40vh}
+.header{position:absolute;top:10px;left:10px;right:10px;z-index:500;display:flex;justify-content:space-between}
+.pill{background:#fff;border-radius:999px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,.15)}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7C3AED;color:#fff;display:grid;place-items:center;font-weight:800}
+.iconBtn{width:40px;height:40px;border-radius:50%;background:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,.15);display:grid;place-items:center;cursor:pointer}
+.sheet{background:#fff;border-radius:26px 26px 0 0;margin-top:-20px;position:relative;z-index:600;box-shadow:0 -8px 24px rgba(0,0,0,.12)}
+.handle{width:32px;height:4px;background:#E9E5FF;border-radius:999px;margin:10px auto}
+.tabs{display:flex;gap:6px;padding:10px 10px;overflow:auto}
+.tab{flex:1;min-width:70px;padding:11px 6px;border-radius:999px;border:none;font-weight:800;font-size:11px;cursor:pointer;white-space:nowrap}
+.tab.active{background:#7C3AED;color:#fff}
+.tab:not(.active){background:#F5F3FF;color:#6B7280}
+.badge{background:#fff;color:#7C3AED;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:900;margin-left:4px}
+.content{padding:0 10px 20px;max-height:56vh;overflow:auto}
+.label{font-size:10px;font-weight:800;color:#8B8BA7;margin:10px 0 6px;letter-spacing:.06em;text-transform:uppercase}
+.inputWrap{position:relative;margin-bottom:10px}
+.input{width:100%;background:#F8F7FF;border:1.5px solid #EDE9FE;border-radius:14px;padding:12px 12px 12px 42px;font-weight:600;font-size:13px;outline:none}
+.inputIcon{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:11px}
+.btn{width:100%;border:none;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btnPrimary{background:#7C3AED;color:#fff}
+.card{border:2px solid #7C3AED;border-radius:18px;padding:12px;margin-bottom:10px;background:#fff}
+.cardAccepted{border-color:#10B981;box-shadow:0 4px 16px rgba(16,185,129,.1)}
+.cardPicked{border-color:#F59E0B}
+.cardFull{border-color:#EF4444}
+.otpHidden{background:#1F1A2E;color:#fff;border-radius:12px;padding:10px;text-align:center;flex:1;border:2px dashed #4B5563}
+.otpHiddenY{background:#FFFBEB;color:#92400E;border-radius:12px;padding:10px;text-align:center;flex:1;border:2px dashed #FCD34D}
+.collect{background:#ECFDF5;color:#065F46;border-radius:12px;padding:10px;text-align:center;flex:1}
+.acceptBtn{background:#7C3AED;color:#fff;border:none;border-radius:999px;padding:11px;flex:1;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px}
+.callBtn{background:#F5F3FF;color:#7C3AED;border:none;border-radius:999px;padding:11px;flex:1;display:grid;place-items:center;cursor:pointer}
+.cancelBtn{background:#FFF1F2;color:#BE123C;border:none;border-radius:999px;padding:11px;flex:1;display:grid;place-items:center;cursor:pointer}
+.cancelTripBtn{background:#FFF1F2;color:#BE123C;border:1.5px solid #FFE4E6;border-radius:999px;padding:8px 10px;font-weight:800;font-size:10px;cursor:pointer}
+.suggest{position:absolute;left:0;right:0;top:44px;background:#fff;border:1.5px solid #EDE9FE;border-radius:12px;z-index:700;max-height:150px;overflow:auto;box-shadow:0 8px 20px rgba(0,0,0,.15);display:none}
+.suggest div{padding:8px 10px;font-size:11px;border-bottom:1px solid #F5F3FF;cursor:pointer}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:none;align-items:flex-end;justify-content:center}
+.overlay.show{display:flex}
+.popup{width:100%;max-width:480px;background:#fff;border-radius:26px 26px 0 0;max-height:90vh;overflow:hidden;display:flex;flex-direction:column}
+.popHeader{background:#1F1A2E;color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.popBody{padding:14px;overflow:auto;flex:1}
+.count{width:44px;height:44px;border-radius:50%;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;display:grid;place-items:center;font-weight:900}
+.toast{position:fixed;top:12px;left:50%;transform:translateX(-50%);background:#1F1A2E;color:#fff;padding:10px 14px;border-radius:12px;z-index:10000;display:none;gap:8px;align-items:center;font-size:11px;font-weight:600;max-width:90%}
+.toast.show{display:flex}
+.auth{position:fixed;inset:0;background:#fff;z-index:10000;display:flex;flex-direction:column}
+.authTop{height:36vh;background:linear-gradient(180deg,#7C3AED,#5B21B6);border-radius:0 0 26px 26px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+.authCard{background:#fff;margin-top:-18px;border-radius:26px 26px 0 0;padding:18px;flex:1;overflow:auto}
 </style>
 </head>
 <body>
-... (rest of file - open the download link for full 510 lines) ...
+<div id="toast" class="toast"><div style="width:20px;height:20px;border-radius:5px;background:#10B981;display:grid;place-items:center">✓</div><span id="toastText">Done</span></div>
+<div id="popOverlay" class="overlay"><div class="popup"><div class="popHeader"><div><div style="font-size:9px;opacity:.7;font-weight:700">NEW REQUEST</div><div style="font-weight:900;font-size:15px;margin-top:2px">Customer wants to join</div></div><div class="count" id="countDown">30</div></div><div style="height:120px;background:linear-gradient(135deg,#F5F3FF,#EDE9FE);display:grid;place-items:center"><div style="text-align:center"><div id="popMapText" style="font-weight:700;font-size:12px;color:#7C3AED">Ketu → Onitsha</div><div id="popSeatText" style="font-size:10px;color:#6B7280;margin-top:2px">Seats</div></div></div><div class="popBody" id="popBody"></div></div></div>
+<div id="endOverlay" class="overlay" style="align-items:center;padding:14px"><div id="endContent" style="width:100%;max-width:360px;background:#fff;border-radius:20px;padding:18px;text-align:center"></div></div>
+<div id="authScreen" class="auth"><div class="authTop"><div style="width:60px;height:60px;border-radius:16px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:24px"><i class="fa-solid fa-car"></i></div><div style="font-weight:900;font-size:20px;margin-top:10px">FLOOT DRIVER</div><div style="font-size:11px;opacity:.85;margin-top:4px">Simple Fixed • Works on pooldriver.floot.com.ng</div></div><div class="authCard"><div style="display:flex;background:#F5F3FF;border-radius:999px;padding:3px;margin-bottom:14px"><button id="loginTab" style="flex:1;padding:9px;border-radius:999px;border:none;background:#fff;color:#7C3AED;font-weight:800;font-size:11px">Login</button><button id="regTab" style="flex:1;padding:9px;border-radius:999px;border:none;background:transparent;color:#6B7280;font-weight:800;font-size:11px">Register</button></div><div id="loginForm"><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-envelope"></i></div><input id="loginEmail" class="input" placeholder="Email"></div><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-lock"></i></div><input id="loginPass" class="input" type="password" placeholder="Password"></div><button id="loginBtn" class="btn btnPrimary">Continue</button><div id="loginMsg" style="font-size:10px;color:#6B7280;text-align:center;margin-top:6px"></div></div><div id="regForm" style="display:none"><div class="inputWrap"><div class="inputIcon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-user"></i></div><input id="regName" class="input" placeholder="Full name"></div><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-phone"></i></div><input id="regPhone" class="input" placeholder="Phone"></div><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-envelope"></i></div><input id="regEmail" class="input" placeholder="Email"></div><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-car"></i></div><input id="regVehicle" class="input" placeholder="Vehicle"></div><div class="inputWrap"><div class="inputIcon" style="background:#FEF2F2;color:#EF4444"><i class="fa-solid fa-lock"></i></div><input id="regPass" class="input" type="password" placeholder="Password"></div><button id="regBtn" class="btn btnPrimary">Create account</button><div id="regMsg" style="font-size:10px;color:#6B7280;text-align:center;margin-top:6px"></div></div></div></div>
+<div class="app" id="mainApp" style="display:none"><div id="map"></div><div class="header"><div class="pill"><div class="avatar" id="avatar">U</div><div><div style="font-weight:800;font-size:12px;line-height:1" id="driverName">Uchenna</div><div style="font-size:10px;color:#6B7280" id="driverEmail">flootinitiative • Car</div></div></div><button id="logoutBtn" class="iconBtn"><i class="fa-solid fa-right-from-bracket" style="font-size:11px;color:#6B7280"></i></button></div><div class="sheet"><div class="handle"></div><div class="tabs"><button id="btnCreate" class="tab"><i class="fa-solid fa-plus"></i> Create</button><button id="btnTrips" class="tab active"><i class="fa-solid fa-route"></i> Trips <span class="badge" id="tripCount">0</span></button><button id="btnRiders" class="tab"><i class="fa-solid fa-users"></i> Riders <span class="badge" id="riderCount">8</span></button><button id="btnHistory" class="tab"><i class="fa-solid fa-clock-rotate-left"></i> History <span class="badge" id="historyCount">0</span></button></div><div class="content"><div id="createSection" style="display:none"><div class="label">Create trip • Set seats e.g 4</div><div style="position:relative"><div class="inputWrap"><div class="inputIcon" style="background:#ECFDF5;color:#10B981"><i class="fa-solid fa-circle"></i></div><input id="fromInput" class="input" placeholder="From - Lagos Island"></div><div id="fromSug" class="suggest"></div></div><div style="position:relative"><div class="inputWrap"><div class="inputIcon" style="background:#FEF2F2;color:#EF4444"><i class="fa-solid fa-location-dot"></i></div><input id="toInput" class="input" placeholder="To - Alimosho"></div><div id="toSug" class="suggest"></div></div><div class="inputWrap"><div class="inputIcon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-chair"></i></div><input id="seatsInput" class="input" type="number" value="4" min="1" max="10"></div><button id="createBtn" class="btn btnPrimary"><i class="fa-solid fa-car"></i> Create Trip</button><div id="createMsg" style="font-size:10px;text-align:center;margin-top:6px;color:#6B7280"></div></div><div id="tripsSection"><div class="label">Trips • Only ongoing • Cancel restored</div><div id="tripsBox" style="font-size:11px;color:#6B7280">Loading...</div></div><div id="ridersSection" style="display:none"><div class="label">Riders • Screenshot exact • OTP hidden • 4 seats limit</div><div id="seatInfo" style="background:#1F1A2E;color:#fff;border-radius:10px;padding:8px;margin-bottom:8px;display:none;font-size:10px"></div><div id="ridersBox" style="font-size:11px;color:#6B7280">Loading...</div></div><div id="historySection" style="display:none"><div class="label">History • Completed & Canceled</div><div id="historyBox" style="font-size:11px;color:#6B7280">No history yet.</div></div></div></div></div>
+<script>
+// SIMPLE - NO MODULES
+var firebaseConfig = { apiKey: "AIzaSyBVIJq5napb_egiLdKhGtySZoPeLUkY9Q4", authDomain: "floot-delivery.firebaseapp.com", projectId: "floot-delivery", storageBucket: "floot-delivery.firebasestorage.app", messagingSenderId: "786230599434", appId: "1:786230599434:web:e1913bd8c2e69a7e1c64f3" };
+firebase.initializeApp(firebaseConfig);
+var db = firebase.firestore();
+var currentDriver=null, map=null, fromMarker=null, toMarker=null, routeLine=null, fromCoord=null, toCoord=null;
+var prevIds=new Set(), curPop=null, timer=null, pending=[], pools=[], ongoingPools=[], riders=[];
+var CENTER=[9.0820,8.6753];
+var saved=JSON.parse(localStorage.getItem("floot_driver_session")||"null");
+if(saved) okLogin(saved);
+function toast(m){ var t=document.getElementById("toast"); document.getElementById("toastText").textContent=m; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },3000); }
+function okLogin(d){ if(!d.vehicle) d.vehicle="Car"; currentDriver=d; document.getElementById("authScreen").style.display="none"; document.getElementById("mainApp").style.display="block"; document.getElementById("driverName").textContent=(d.name||"Uchenna").split(" ")[0]; document.getElementById("driverEmail").textContent=(d.email||"flootinitiative").split("@")[0]+" • "+(d.vehicle||"Car"); document.getElementById("avatar").textContent=(d.name||"U")[0].toUpperCase(); setTimeout(function(){ initMap(); listen(); },300); }
+//... rest of JS is in the file - this paste is truncated, download the full file above for complete working code
+</script>
+</body>
+</html>
