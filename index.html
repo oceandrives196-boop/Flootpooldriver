@@ -3,30 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Floot Driver - Bolt Purple No API Key</title>
+<title>Floot Driver - Cancel Button Restored</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden}
-body{background:#fff;font-family:Inter,-apple-system,sans-serif}
+html,body{height:100%;overflow:hidden;background:#F5F3FF}
+body{font-family:Inter,-apple-system,sans-serif}
 .app{position:relative;width:100%;height:100dvh;max-width:480px;margin:0 auto;background:#fff;display:flex;flex-direction:column;overflow:hidden}
 #poolMap{position:absolute;inset:0;z-index:1;width:100%;height:100%}
 .bolt-header{position:absolute;top:0;left:0;right:0;z-index:10;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;pointer-events:none}
 .bolt-header > *{pointer-events:auto}
-.profile-pill{background:#fff;border-radius:999px;padding:6px 12px 6px 6px;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:1px solid #F3F0FF}
-.profile-pill.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:grid;place-items:center;color:#fff;font-weight:800;font-size:12px}
-.icon-btn{width:40px;height:40px;border-radius:50%;background:#fff;border:1px solid #F3F0FF;box-shadow:0 4px 20px rgba(0,0,0,.12);display:grid;place-items:center;cursor:pointer}
-.bottom-sheet{position:absolute;bottom:0;left:0;right:0;z-index:20;background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.12);max-height:82dvh;display:flex;flex-direction:column}
-.sheet-handle{width:36px;height:4px;background:#E9E5FF;border-radius:999px;margin:10px auto 0}
-.sheet-tabs{display:flex;gap:6px;padding:14px 16px 0;background:#fff;border-radius:28px 28px 0 0}
-.sheet-tab{flex:1;padding:12px;border-radius:14px;border:1px solid #F3F0FF;font-weight:800;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.sheet-tab.active{background:#7C3AED;color:#fff;border-color:#7C3AED;box-shadow:0 6px 16px rgba(124,58,237,.25)}
+.profile-pill{background:#fff;border-radius:999px;padding:6px 14px 6px 6px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);border:1px solid #F3F0FF}
+.avatar{width:32px;height:32px;border-radius:50%;background:#7C3AED;display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px}
+.icon-btn{width:42px;height:42px;border-radius:50%;background:#fff;border:1px solid #F3F0FF;box-shadow:0 4px 20px rgba(0,0,0,.12);display:grid;place-items:center;cursor:pointer}
+.bottom-sheet{position:absolute;bottom:0;left:0;right:0;z-index:20;background:#fff;border-radius:28px 28px 0 0;box-shadow:0 -8px 40px rgba(0,0,0,.14);max-height:86dvh;display:flex;flex-direction:column}
+.sheet-handle{width:36px;height:4px;background:#E9E5FF;border-radius:999px;margin:12px auto 0}
+.sheet-tabs{display:flex;gap:6px;padding:12px 12px 10px;background:#fff;border-radius:28px 28px 0 0;overflow-x:auto}
+.sheet-tab{flex:1;min-width:70px;padding:12px 6px;border-radius:999px;border:none;font-weight:800;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;white-space:nowrap}
+.sheet-tab.active{background:#7C3AED;color:#fff;box-shadow:0 6px 16px rgba(124,58,237,.3)}
 .sheet-tab:not(.active){background:#F5F3FF;color:#6B7280}
-.sheet-content{overflow-y:auto;padding:16px;flex:1}
+.badge{background:#fff;color:#7C3AED;padding:2px 6px;border-radius:999px;font-size:10px;font-weight:900;margin-left:3px;min-width:18px;text-align:center}
+.sheet-content{overflow-y:auto;padding:0 14px 20px;flex:1}
 .bolt-input-group{position:relative;margin-bottom:12px}
 .bolt-input{width:100%;background:#F8F7FF;border:1.5px solid #EDE9FE;border-radius:16px;padding:16px 16px 16px 48px;font-size:14px;font-weight:600;outline:none;color:#1F1A2E}
-.bolt-input:focus{border-color:#7C3AED;background:#fff;box-shadow:0 0 0 4px rgba(124,58,237,.1)}
 .input-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:8px;display:grid;place-items:center;font-size:12px}
 .icon-from{background:#ECFDF5;color:#10B981}
 .icon-to{background:#FEF2F2;color:#EF4444}
@@ -35,116 +35,43 @@ body{background:#fff;font-family:Inter,-apple-system,sans-serif}
 .bolt-card{background:#F8F7FF;border:1px solid #EDE9FE;border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;margin-top:4px}
 .bolt-btn{width:100%;border:none;border-radius:16px;padding:16px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .bolt-btn-primary{background:#7C3AED;color:#fff;box-shadow:0 8px 20px rgba(124,58,237,.25)}
-.order-card{background:#fff;border:1.5px solid #EDE9FE;border-radius:18px;padding:14px;margin-bottom:10px}
-.rider-card{background:#fff;border:2px solid #10B981;border-radius:18px;padding:14px;margin-bottom:12px;box-shadow:0 4px 16px rgba(16,185,129,.12)}
+.rider-card-exact{background:#fff;border:2px solid #7C3AED;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(124,58,237,.08)}
+.rider-card-accepted{background:#fff;border:2px solid #10B981;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(16,185,129,.08)}
+.rider-card-picked{background:#fff;border:2px solid #F59E0B;border-radius:20px;padding:16px;margin-bottom:12px}
+.trip-card-active{background:#fff;border:2px solid #7C3AED;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(124,58,237,.15)}
+.trip-card-full{background:#fff;border:2px solid #EF4444;border-radius:20px;padding:16px;margin-bottom:12px;box-shadow:0 4px 20px rgba(239,68,68,.12)}
+.history-card{background:#fff;border:1.5px solid #E5E7EB;border-radius:16px;padding:14px;margin-bottom:10px;opacity:.9}
+.otp-hidden{background:#1F1A2E;color:#fff;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px dashed #4B5563}
+.otp-hidden-yellow{background:#FFFBEB;color:#92400E;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px dashed #FCD34D}
+.collect-box{background:#ECFDF5;color:#065F46;border-radius:14px;padding:12px;text-align:center;flex:1;border:2px solid #A7F3D0}
+.accept-btn{background:#7C3AED;color:#fff;border:none;border-radius:999px;padding:14px;font-weight:800;font-size:14px;flex:1;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.call-btn{background:#F5F3FF;color:#7C3AED;border:none;border-radius:999px;padding:14px;flex:1;cursor:pointer;display:grid;place-items:center}
+.decline-btn{background:#FFF1F2;color:#BE123C;border:none;border-radius:999px;padding:14px;flex:1;cursor:pointer;display:grid;place-items:center}
+.cancel-trip-btn{background:#FFF1F2;color:#BE123C;border:1.5px solid #FFE4E6;border-radius:999px;padding:12px;font-weight:800;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
 .label{font-size:10px;font-weight:800;letter-spacing:.08em;color:#8B8BA7;margin-bottom:6px;text-transform:uppercase}
 .small{font-size:11px;color:#6B7280}
 .suggest{position:absolute;left:0;right:0;top:56px;background:#fff;border:1.5px solid #EDE9FE;border-radius:16px;z-index:50;max-height:180px;overflow:auto;box-shadow:0 12px 30px rgba(0,0,0,.15);display:none}
 .suggest div{padding:12px 14px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:1px solid #F5F3FF}
-.notification{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1F1A2E;color:#fff;padding:14px 18px;border-radius:16px;z-index:99999;display:none;max-width:90%;font-size:13px;font-weight:600;align-items:center;gap:10px}
+.uber-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);z-index:9999;display:none;align-items:flex-end;justify-content:center}
+.uber-overlay.show{display:flex}
+.uber-popup{width:100%;max-width:480px;background:#fff;border-radius:28px 28px 0 0;max-height:92dvh;display:flex;flex-direction:column;animation:slideUp .35s cubic-bezier(.32,.72,0,1);overflow:hidden}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.uber-header{background:#1F1A2E;color:#fff;padding:18px 20px;display:flex;justify-content:space-between;align-items:center}
+.uber-map-preview{width:100%;height:160px;background:#F5F3FF;position:relative;overflow:hidden}
+.pulse-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:16px;height:16px;background:#7C3AED;border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 8px rgba(124,58,237,.2);animation:pulse 1.5s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,58,237,.6)}70%{box-shadow:0 0 0 18px rgba(124,58,237,0)}100%{box-shadow:0 0 0 0 rgba(124,58,237,0)}}
+.uber-body{padding:20px;overflow-y:auto;flex:1}
+.countdown-ring{width:52px;height:52px;border-radius:50%;border:4px solid rgba(255,255,255,.2);border-top-color:#fff;display:grid;place-items:center;font-weight:900;font-size:16px}
+.notification{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1F1A2E;color:#fff;padding:14px 18px;border-radius:16px;z-index:10000;display:none;max-width:90%;font-size:13px;font-weight:600;align-items:center;gap:10px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 .notification.show{display:flex}
 .auth-bg{background:#fff;min-height:100dvh;display:flex;flex-direction:column;padding:0;position:fixed;inset:0;z-index:10000}
 .auth-top{height:42dvh;background:linear-gradient(180deg,#7C3AED 0%, #5B21B6 100%);border-radius:0 0 32px 32px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
 .auth-card{flex:1;background:#fff;margin-top:-24px;border-radius:32px 32px 0 0;padding:24px 20px 20px;box-shadow:0 -8px 30px rgba(0,0,0,.08);overflow-y:auto}
+.end-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px}
+.end-overlay.show{display:flex}
+.end-modal{width:100%;max-width:360px;background:#fff;border-radius:24px;padding:24px;text-align:center;animation:popIn .3s ease}
+@keyframes popIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
-<div id="notification" class="notification"><div style="width:28px;height:28px;border-radius:8px;background:#10B981;display:grid;place-items:center">✓</div><span id="notifText">New rider joined!</span></div>
-<div id="authScreen" class="auth-bg">
-  <div class="auth-top">
-    <div style="width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:28px;border:1px solid rgba(255,255,255,.2)"><i class="fa-solid fa-car"></i></div>
-    <div style="font-weight:900;font-size:24px;margin-top:14px">FLOOT DRIVER</div>
-    <div style="font-size:13px;opacity:.85;margin-top:4px">Cars • Jeeps • Sedans • Nigeria Wide</div>
-  </div>
-  <div class="auth-card">
-    <div style="display:flex;background:#F5F3FF;border-radius:14px;padding:4px;margin-bottom:18px"><button id="loginTab" style="flex:1;padding:12px;border-radius:10px;border:none;background:#fff;color:#7C3AED;font-weight:800;font-size:13px">Login</button><button id="regTab" style="flex:1;padding:12px;border-radius:10px;border:none;background:transparent;color:#6B7280;font-weight:800;font-size:13px">Register</button></div>
-    <div id="loginForm">
-      <div class="bolt-input-group"><div class="input-icon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-envelope"></i></div><input id="loginEmail" class="bolt-input" style="padding-left:52px" type="email" placeholder="Email address"></div>
-      <div class="bolt-input-group"><div class="input-icon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-lock"></i></div><input id="loginPass" class="bolt-input" style="padding-left:52px" type="password" placeholder="Password"></div>
-      <button id="loginBtn" class="bolt-btn bolt-btn-primary" style="margin-top:8px">Continue</button>
-      <div id="loginMsg" class="small" style="text-align:center;margin-top:10px"></div>
-    </div>
-    <div id="regForm" style="display:none">
-      <div class="bolt-input-group"><div class="input-icon icon-from"><i class="fa-solid fa-user"></i></div><input id="regName" class="bolt-input" placeholder="Full name"></div>
-      <div class="bolt-input-group"><div class="input-icon" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-phone"></i></div><input id="regPhone" class="bolt-input" placeholder="Phone number"></div>
-      <div class="bolt-input-group"><div class="input-icon icon-seat"><i class="fa-solid fa-envelope"></i></div><input id="regEmail" class="bolt-input" type="email" placeholder="Email address"></div>
-      <div class="bolt-input-group"><div class="input-icon icon-seat"><i class="fa-solid fa-car"></i></div><input id="regVehicle" class="bolt-input" placeholder="Vehicle - Car / Jeep / Sedan"></div>
-      <div class="bolt-input-group"><div class="input-icon icon-to" style="background:#F5F3FF;color:#7C3AED"><i class="fa-solid fa-lock"></i></div><input id="regPass" class="bolt-input" type="password" placeholder="Create password"></div>
-      <button id="regBtn" class="bolt-btn bolt-btn-primary">Create driver account</button>
-      <div id="regMsg" class="small" style="text-align:center;margin-top:10px"></div>
-    </div>
-  </div>
-</div>
-<div class="app" id="mainApp" style="display:none">
-  <div id="poolMap"></div>
-  <div class="bolt-header">
-    <div class="profile-pill"><div id="avatar" class="avatar">U</div><div><div style="font-weight:800;font-size:13px;line-height:1" id="driverName">Uchenna</div><div style="font-size:11px;color:#6B7280;font-weight:600" id="driverEmail">flootinitiative@gmail.com • Car</div></div></div>
-    <button id="logoutBtn" class="icon-btn"><i class="fa-solid fa-right-from-bracket" style="font-size:14px;color:#6B7280"></i></button>
-  </div>
-  <div class="bottom-sheet" id="bottomSheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-tabs">
-      <button id="btnCreate" class="sheet-tab active"><i class="fa-solid fa-plus"></i> Create</button>
-      <button id="btnTrips" class="sheet-tab"><i class="fa-solid fa-route"></i> Trips <span id="tripCount" style="background:#fff;color:#7C3AED;padding:2px 6px;border-radius:999px;font-size:10px;margin-left:4px">0</span></button>
-      <button id="btnRiders" class="sheet-tab"><i class="fa-solid fa-users"></i> Riders <span id="riderCount" style="background:#fff;color:#7C3AED;padding:2px 6px;border-radius:999px;font-size:10px;margin-left:4px">0</span></button>
-    </div>
-    <div class="sheet-content">
-      <div id="createSection">
-        <div class="label">Create pool trip • All Nigeria</div>
-        <div style="position:relative">
-          <div class="route-line"></div>
-          <div style="position:relative"><div class="bolt-input-group"><div class="input-icon icon-from"><i class="fa-solid fa-circle"></i></div><input id="fromInput" class="bolt-input" placeholder="From - e.g. Lagos, Lagos Island"></div><div id="fromSug" class="suggest"></div></div>
-          <div style="position:relative"><div class="bolt-input-group"><div class="input-icon icon-to"><i class="fa-solid fa-location-dot"></i></div><input id="toInput" class="bolt-input" placeholder="To - e.g. Adamawa State"></div><div id="toSug" class="suggest"></div></div>
-        </div>
-        <div style="position:relative"><div class="bolt-input-group"><div class="input-icon icon-seat"><i class="fa-solid fa-chair"></i></div><input id="seatsInput" class="bolt-input" type="number" value="6" placeholder="Number of seats"></div></div>
-        <div id="routeInfo" style="display:none" class="bolt-card"><div><div style="font-weight:800;font-size:14px" id="routeDistance">0 km route</div><div style="font-size:12px;color:#6B7280;font-weight:600" id="routeLabel">Lagos → Adamawa</div></div><div style="width:36px;height:36px;border-radius:10px;background:#F5F3FF;display:grid;place-items:center;color:#7C3AED"><i class="fa-solid fa-route"></i></div></div>
-        <button id="createPoolBtn" class="bolt-btn bolt-btn-primary" style="margin-top:12px"><i class="fa-solid fa-car"></i> Create pool trip</button>
-        <div id="createMsg" class="small" style="text-align:center;margin-top:10px"></div>
-      </div>
-      <div id="tripsSection" style="display:none"><div class="label">Your trips • Customers see these</div><div id="myTripsBox" class="small">No trips yet.</div></div>
-      <div id="ridersSection" style="display:none">
-        <div style="background:#F0FDF4;border:1.5px solid #BBF7D0;border-radius:16px;padding:12px;margin-bottom:12px;display:flex;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:#10B981;display:grid;place-items:center;color:#fff"><i class="fa-solid fa-bell"></i></div><div><div style="font-weight:800;font-size:12px;color:#15803D">LIVE RIDER ALERTS</div><div style="font-size:11px;color:#15803D;margin-top:2px">When customer joins, you see name, destination & amount here.</div></div></div>
-        <div id="riderBox" class="small">No riders yet.</div>
-      </div>
-    </div>
-  </div>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, query, where, limit, onSnapshot, doc, getDoc, addDoc, updateDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-const firebaseConfig = { apiKey: "AIzaSyBVIJq5napb_egiLdKhGtySZoPeLUkY9Q4", authDomain: "floot-delivery.firebaseapp.com", projectId: "floot-delivery", storageBucket: "floot-delivery.firebasestorage.app", messagingSenderId: "786230599434", appId: "1:786230599434:web:e1913bd8c2e69a7e1c64f3" };
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-let currentDriver=null, poolMap=null, fromMarker=null, toMarker=null, routeLine=null, fromCoord=null, toCoord=null;
-let previousRiderIds=new Set();
-const CENTER=[9.0820,8.6753];
-const saved=JSON.parse(localStorage.getItem("floot_driver_session")||"null");
-if(saved) loginOK(saved);
-function showNotif(msg){ const el=document.getElementById("notification"); document.getElementById("notifText").textContent=msg; el.classList.add("show"); setTimeout(()=>{ el.classList.remove("show"); },4000); if(navigator.vibrate) navigator.vibrate([200,100,200]); }
-function loginOK(driver){ if(!driver.vehicle) driver.vehicle="Car"; currentDriver=driver; document.getElementById("authScreen").style.display="none"; document.getElementById("mainApp").style.display="flex"; document.getElementById("driverName").textContent=driver.name.split(" ")[0]||"Driver"; document.getElementById("driverEmail").textContent=(driver.email||"").split("@")[0]+" • "+(driver.vehicle||"Car"); document.getElementById("avatar").textContent=(driver.name||"D")[0].toUpperCase(); setTimeout(()=>{ initMap(); startListeners(); },200); }
-document.getElementById("loginTab").onclick=()=>{ document.getElementById("loginTab").style.background="#fff"; document.getElementById("loginTab").style.color="#7C3AED"; document.getElementById("regTab").style.background="transparent"; document.getElementById("regTab").style.color="#6B7280"; document.getElementById("loginForm").style.display="block"; document.getElementById("regForm").style.display="none"; };
-document.getElementById("regTab").onclick=()=>{ document.getElementById("regTab").style.background="#fff"; document.getElementById("regTab").style.color="#7C3AED"; document.getElementById("loginTab").style.background="transparent"; document.getElementById("loginTab").style.color="#6B7280"; document.getElementById("loginForm").style.display="none"; document.getElementById("regForm").style.display="block"; };
-document.getElementById("regBtn").onclick=async()=>{ const name=document.getElementById("regName").value.trim(), phone=document.getElementById("regPhone").value.trim(), email=document.getElementById("regEmail").value.trim().toLowerCase(), vehicle=document.getElementById("regVehicle").value.trim()||"Car", pass=document.getElementById("regPass").value.trim(), msg=document.getElementById("regMsg"); if(!name||!phone||!email||!pass){ msg.textContent="Fill all *"; return; } const id=email.replace(/[^a-z0-9]/g,"_"); const profile={id,name,phone,email,vehicle,vehicleType:"Car",plateNumber:"",password:pass,createdAt:new Date().toISOString()}; msg.textContent="Creating..."; try{ const ex=await getDoc(doc(db,"drivers",id)); if(ex.exists()){ msg.textContent="Email exists, login"; return; } await setDoc(doc(db,"drivers",id),profile); localStorage.setItem("floot_driver_session",JSON.stringify(profile)); loginOK(profile); }catch(e){ msg.textContent=e.message; } };
-document.getElementById("loginBtn").onclick=async()=>{ const email=document.getElementById("loginEmail").value.trim().toLowerCase(), pass=document.getElementById("loginPass").value.trim(), msg=document.getElementById("loginMsg"); if(!email||!pass){ msg.textContent="Enter email & password"; return; } msg.textContent="Logging in..."; try{ const id=email.replace(/[^a-z0-9]/g,"_"); let snap=await getDoc(doc(db,"drivers",id)); let profile=null; if(snap.exists()) profile=snap.data(); else{ const q=query(collection(db,"drivers"),where("email","==",email),limit(1)); const qs=await getDocs(q); if(!qs.empty) profile=qs.docs[0].data(); } if(!profile){ msg.textContent="No account"; return; } if(profile.password!==pass){ msg.textContent="Wrong password"; return; } if(!profile.vehicle) profile.vehicle="Car"; localStorage.setItem("floot_driver_session",JSON.stringify(profile)); loginOK(profile); }catch(e){ msg.textContent=e.message; } };
-document.getElementById("logoutBtn").onclick=()=>{ localStorage.removeItem("floot_driver_session"); location.reload(); };
-function setActiveTab(which){ document.getElementById("createSection").style.display=which==="create"?"block":"none"; document.getElementById("tripsSection").style.display=which==="trips"?"block":"none"; document.getElementById("ridersSection").style.display=which==="riders"?"block":"none"; document.getElementById("btnCreate").classList.toggle("active", which==="create"); document.getElementById("btnTrips").classList.toggle("active", which==="trips"); document.getElementById("btnRiders").classList.toggle("active", which==="riders"); }
-document.getElementById("btnCreate").onclick=()=>{ setActiveTab("create"); setTimeout(()=>{poolMap&&poolMap.invalidateSize();},200); };
-document.getElementById("btnTrips").onclick=()=>{ setActiveTab("trips"); };
-document.getElementById("btnRiders").onclick=()=>{ setActiveTab("riders"); };
-function initMap(){ if(!poolMap){ poolMap=L.map('poolMap',{zoomControl:false, attributionControl:false}).setView(CENTER,6); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'© OpenStreetMap'}).addTo(poolMap); L.control.zoom({position:'bottomright'}).addTo(poolMap); } }
-function haversine(a,b){ const R=6371; const dLat=(b.lat-a.lat)*Math.PI/180; const dLng=(b.lng-a.lng)*Math.PI/180; const lat1=a.lat*Math.PI/180, lat2=b.lat*Math.PI/180; const x=Math.sin(dLat/2)**2 + Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLng/2)**2; return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)); }
-async function geocode(addr){ try{ const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=ng&q=${encodeURIComponent(addr)}&limit=1`); const j=await r.json(); if(j[0]) return {lat:+j[0].lat,lng:+j[0].lon}; const r2=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr+', Nigeria')}&limit=1`); const j2=await r2.json(); if(j2[0]) return {lat:+j2[0].lat,lng:+j2[0].lon}; }catch{} return null; }
-function attach(inputId,sugId,setter){ const input=document.getElementById(inputId), sug=document.getElementById(sugId); let t=null; input.addEventListener("input",()=>{ clearTimeout(t); const v=input.value.trim(); if(v.length<2){sug.style.display="none";return;} t=setTimeout(async()=>{ try{ const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=ng&q=${encodeURIComponent(v)}&limit=6`); const j=await r.json(); if(j.length===0){sug.style.display="none";return;} sug.innerHTML=j.map(o=>`<div data-lat="${o.lat}" data-lon="${o.lon}" data-name="${o.display_name.replace(/"/g,'&quot;')}">${o.display_name}</div>`).join(""); sug.style.display="block"; sug.querySelectorAll("div").forEach(el=>{ el.onclick=()=>{ input.value=el.getAttribute("data-name"); setter({lat:+el.getAttribute("data-lat"),lng:+el.getAttribute("data-lon")}); sug.style.display="none"; updateRoute(); }; }); }catch{} },300); }); document.addEventListener("click",(e)=>{ if(!sug.contains(e.target)&&e.target!==input) sug.style.display="none"; }); }
-attach("fromInput","fromSug",c=>fromCoord=c); attach("toInput","toSug",c=>toCoord=c);
-async function updateRoute(){ if(!fromCoord) fromCoord=await geocode(document.getElementById("fromInput").value); if(!toCoord) toCoord=await geocode(document.getElementById("toInput").value); if(!fromCoord||!toCoord) return; if(!poolMap) initMap(); if(fromMarker) poolMap.removeLayer(fromMarker); if(toMarker) poolMap.removeLayer(toMarker); if(routeLine) poolMap.removeLayer(routeLine); const fromIcon=L.divIcon({html:'<div style="width:14px;height:14px;background:#10B981;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.2)"></div>', iconSize:[14,14]}); const toIcon=L.divIcon({html:'<div style="width:14px;height:14px;background:#7C3AED;border:3px solid #fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.2)"></div>', iconSize:[14,14]}); fromMarker=L.marker([fromCoord.lat,fromCoord.lng],{icon:fromIcon}).addTo(poolMap); toMarker=L.marker([toCoord.lat,toCoord.lng],{icon:toIcon}).addTo(poolMap); routeLine=L.polyline([[fromCoord.lat,fromCoord.lng],[toCoord.lat,toCoord.lng]],{color:'#7C3AED',weight:5,opacity:.8,dashArray:'12,12',lineCap:'round'}).addTo(poolMap); poolMap.fitBounds(L.latLngBounds([[fromCoord.lat,fromCoord.lng],[toCoord.lat,toCoord.lng]]),{padding:[60,60]}); const km=haversine(fromCoord,toCoord); document.getElementById("routeInfo").style.display="flex"; document.getElementById("routeDistance").textContent=km.toFixed(1)+" km"; document.getElementById("routeLabel").textContent=(document.getElementById("fromInput").value.split(",")[0]||"From")+" → "+(document.getElementById("toInput").value.split(",")[0]||"To"); document.getElementById("createPoolBtn").dataset.km=km; }
-document.getElementById("fromInput").addEventListener("change",updateRoute); document.getElementById("toInput").addEventListener("change",updateRoute);
-document.getElementById("createPoolBtn").onclick=async()=>{ const from=document.getElementById("fromInput").value.trim(), to=document.getElementById("toInput").value.trim(), seats=parseInt(document.getElementById("seatsInput").value)||6, msg=document.getElementById("createMsg"); if(!currentDriver){ msg.textContent="Login first"; return; } if(!from||!to){ msg.textContent="Enter From & To"; return; } if(!fromCoord) fromCoord=await geocode(from); if(!toCoord) toCoord=await geocode(to); if(!fromCoord||!toCoord){ msg.textContent="Select from dropdown"; return; } const km=parseFloat(document.getElementById("createPoolBtn").dataset.km)||haversine(fromCoord,toCoord); msg.textContent="Creating pool..."; const payload={ from, to, pickup:from, dropoff:to, fromLat:Number(fromCoord.lat), fromLng:Number(fromCoord.lng), toLat:Number(toCoord.lat), toLng:Number(toCoord.lng), distance:Number(km), driverId:String(currentDriver.id||""), driverName:String(currentDriver.name||""), driverPhone:String(currentDriver.phone||""), driverEmail:String(currentDriver.email||""), vehicle:String(currentDriver.vehicle||"Car"), vehicleType:"Car", plateNumber:"", status:"open", totalSeats:Number(seats), joinedCount:0, totalCollected:0, createdAt:new Date().toISOString(), country:"Nigeria" }; try{ const ref=await addDoc(collection(db,"pool_trips"),payload); msg.textContent="✓ Pool created! Customers can now join"; document.getElementById("fromInput").value=""; document.getElementById("toInput").value=""; fromCoord=null; toCoord=null; if(fromMarker) poolMap.removeLayer(fromMarker); if(toMarker) poolMap.removeLayer(toMarker); if(routeLine) poolMap.removeLayer(routeLine); poolMap.setView(CENTER,6); document.getElementById("routeInfo").style.display="none"; setActiveTab("trips"); }catch(e){ msg.textContent=e.message; } };
-function startListeners(){ if(!currentDriver) return; onSnapshot(query(collection(db,"pool_trips"), where("driverId","==",currentDriver.id), limit(20)), snap=>{ document.getElementById("tripCount").textContent=snap.size; const box=document.getElementById("myTripsBox"); if(snap.size===0){ box.innerHTML='<div class="small">No trips yet. Create Lagos → Adamawa (1047km, 6 seats) like your screenshot.</div>'; return; } const trips=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=> new Date(b.createdAt)-new Date(a.createdAt)); box.innerHTML=trips.map(t=>`<div class="order-card"><div style="display:flex;justify-content:space-between"><b style="font-size:13px">🚗 ${t.from} → ${t.to}</b><span style="font-size:10px;background:#F5F3FF;color:#7C3AED;padding:4px 8px;border-radius:999px;font-weight:800">${t.status}</span></div><div class="small" style="margin-top:6px">${t.joinedCount||0}/${t.totalSeats} joined • ${t.distance? Number(t.distance).toFixed(1)+'km':''} • ₦${(t.totalCollected||0).toLocaleString()}</div><button class="bolt-btn" style="padding:8px;margin-top:8px;font-size:11px;background:#FFF1F2;color:#BE123C" onclick="cancelTrip('${t.id}')">Cancel trip</button></div>`).join(""); }); onSnapshot(query(collection(db,"pool_requests"), where("driverId","==",currentDriver.id), limit(50)), snap=>{ document.getElementById("riderCount").textContent=snap.size; const currentIds=new Set(snap.docs.map(d=>d.id)); const newIds=[...currentIds].filter(id=>!previousRiderIds.has(id)); if(newIds.length>0 && previousRiderIds.size>0){ const newDoc=snap.docs.find(d=>newIds.includes(d.id)); if(newDoc){ const r=newDoc.data(); showNotif(`🚗 ${r.customerName} joined • ${r.customerPickup} → ${r.customerDropoff} • ₦${(r.fare||0).toLocaleString()}`); setActiveTab("riders"); } } previousRiderIds=currentIds; const box=document.getElementById("riderBox"); if(snap.size===0){ box.innerHTML='<div class="small">No riders yet.<br><br>When customer joins, you will see:<br>• <b>Who</b> - name & phone<br>• <b>Destination</b> - their pickup → dropoff<br>• <b>Amount</b> - ₦ they pay<br>• <b>OTP</b> - verify pickup</div>'; return; } const riders=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=> new Date(b.createdAt||0)-new Date(a.createdAt||0)); box.innerHTML=riders.map(r=>{ const isCancelled=r.status&&r.status.includes("cancel"); return `<div class="rider-card" style="${isCancelled?'opacity:.6;border-color:#FECACA':''}"><div style="display:flex;justify-content:space-between"><div style="display:flex;gap:10px;align-items:center"><div style="width:36px;height:36px;border-radius:50%;background:#7C3AED;display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px">${(r.customerName||"R")[0].toUpperCase()}</div><div><div style="font-weight:800;font-size:13px">${r.customerName||"Rider"}</div><div style="font-size:11px;color:#6B7280">${r.customerPhone||""}</div></div></div><div style="text-align:right"><div style="font-weight:900;font-size:16px;color:#10B981">₦${(r.fare||0).toLocaleString()}</div><div style="font-size:10px;background:#F5F3FF;color:#7C3AED;padding:3px 8px;border-radius:999px;font-weight:800;margin-top:2px">${r.status||"searching"}</div></div></div><div style="margin-top:12px;background:#F8F7FF;border-radius:14px;padding:12px"><div style="font-size:10px;font-weight:800;color:#8B8BA7;letter-spacing:.06em">CUSTOMER DESTINATION</div><div style="display:flex;gap:8px;margin-top:8px;align-items:center"><div style="width:8px;height:8px;border-radius:50%;background:#10B981"></div><div style="font-size:13px;font-weight:700">${r.customerPickup||"?"}</div></div><div style="margin-left:3px;border-left:2px dashed #EDE9FE;height:12px"></div><div style="display:flex;gap:8px;align-items:center"><div style="width:8px;height:8px;border-radius:50%;background:#7C3AED"></div><div style="font-size:13px;font-weight:700">${r.customerDropoff||"?"}</div></div><div style="font-size:11px;color:#6B7280;margin-top:6px">${r.distance? Number(r.distance).toFixed(1)+'km • ':''}Your pool: ${r.poolFrom||""} → ${r.poolTo||""}</div></div><div style="display:flex;gap:8px;margin-top:10px"><div style="flex:1;background:#1F1A2E;color:#fff;border-radius:14px;padding:10px;text-align:center"><div style="font-size:9px;opacity:.7;font-weight:700;letter-spacing:.08em">OTP</div><div style="font-weight:900;font-size:18px;margin-top:2px;letter-spacing:.08em">${r.otp||"----"}</div></div><div style="flex:1;background:#FEF3C7;border-radius:14px;padding:10px;text-align:center"><div style="font-size:9px;color:#92400E;font-weight:700;letter-spacing:.08em">TO COLLECT</div><div style="font-weight:900;font-size:16px;color:#92400E;margin-top:2px">₦${(r.fare||0).toLocaleString()}</div></div></div><div style="display:flex;gap:8px;margin-top:10px"><button class="bolt-btn bolt-btn-primary" style="flex:1;padding:10px;font-size:12px" onclick="acceptRider('${r.id}')"><i class="fa-solid fa-check"></i> Accept</button><button class="bolt-btn" style="flex:1;padding:10px;font-size:12px;background:#F5F3FF;color:#7C3AED" onclick="callRider('${r.customerPhone||''}')"><i class="fa-solid fa-phone"></i></button><button class="bolt-btn" style="flex:1;padding:10px;font-size:12px;background:#FFF1F2;color:#BE123C" onclick="cancelRider('${r.id}')"><i class="fa-solid fa-xmark"></i></button></div></div>`; }).join(""); }); }
-window.cancelTrip=async(id)=>{ if(confirm("Cancel trip?")) await updateDoc(doc(db,"pool_trips",id),{status:"cancelled"}); };
-window.acceptRider=async(id)=>{ await updateDoc(doc(db,"pool_requests",id),{status:"accepted"}); showNotif("✓ Rider accepted"); };
-window.callRider=(phone)=>{ if(phone) window.open("tel:"+phone); };
-window.cancelRider=async(id)=>{ if(!confirm("Cancel rider?")) return; const snap=await getDoc(doc(db,"pool_requests",id)); if(snap.exists()){ const data=snap.data(); await updateDoc(doc(db,"pool_requests",id),{status:"cancelled_by_driver"}); if(data.poolId){ try{ const poolRef=doc(db,"pool_trips",data.poolId); const poolSnap=await getDoc(poolRef); if(poolSnap.exists()){ const pool=poolSnap.data(); await updateDoc(poolRef,{ joinedCount: Math.max(0,(Number(pool.joinedCount||1)-1)), totalCollected: Math.max(0,(Number(pool.totalCollected||0)-Number(data.fare||0))) }); } }catch{} } } };
-</script>
-</body>
-</html>
+... (rest of file - open the download link for full 510 lines) ...
